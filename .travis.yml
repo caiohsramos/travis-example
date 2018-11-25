@@ -1,12 +1,15 @@
 dist: xenial
-language: python
-python:
-  - "3.7"
-install:
-  pip install flask pytest
-script: pytest
-
-after_success:
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker build -t caiohsramos/first_project .
-  - docker push caiohsramos/first_project
+jobs:
+  include:
+    - stage: test
+      language: python
+      python:
+        - "3.7"
+      install: 
+        pip install pytest
+      script: pytest
+    - stage: build
+      script:
+        - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+        - docker build -t caiohsramos/first_project .
+        - docker push caiohsramos/first_project
